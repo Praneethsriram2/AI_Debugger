@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tooltip } from 'antd';
-import { Bug, FileText, BarChart3, Target, Info } from 'lucide-react';
+import { Bug, FileText, BarChart3, Target, Info, CheckCircle2 } from 'lucide-react';
 import type { AnalysisResponse } from '../types/debugging';
 
 interface ResultSummaryProps {
@@ -15,22 +15,36 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({ result }) => {
     return 'Low';
   };
 
+  const isIssue = result.isDebuggingIssue;
   const confidenceScore = result.confidence > 1 ? result.confidence : result.confidence * 100;
   const confidencePercent = Math.round(confidenceScore);
   const confidenceLevel = getConfidenceLevel(result.confidence);
-  const confidenceText = `${confidencePercent}% (${confidenceLevel})`;
+  
+  const confidenceText = isIssue
+    ? `${confidencePercent}% (${confidenceLevel})`
+    : confidencePercent > 0
+    ? `${confidencePercent}% (Non-Issue)`
+    : 'N/A';
+
+  const displayErrorType = isIssue
+    ? (result.errorType || 'Unknown Error')
+    : (result.errorType && result.errorType.toLowerCase() !== 'unknown error' ? result.errorType : 'N/A (Not an Error)');
+
+  const displayRootCause = isIssue
+    ? (result.rootCause || 'No root cause identified')
+    : (result.rootCause || 'The input does not contain a software error or stack trace.');
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 min-w-0">
       {/* 1. Is Debugging Issue */}
       <div className="bg-white rounded-xl border border-slate-200/80 p-3.5 sm:p-4 shadow-sm flex items-center gap-3 min-w-0">
-        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-          <Bug className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
+        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0 ${isIssue ? 'bg-red-100 text-red-500' : 'bg-slate-100 text-slate-500'}`}>
+          {isIssue ? <Bug className="w-4 h-4 sm:w-5 sm:h-5" /> : <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-slate-500" />}
         </div>
         <div className="min-w-0">
           <p className="text-xs font-medium text-slate-500">Is Debugging Issue?</p>
-          <p className={`text-sm sm:text-base font-bold ${result.isDebuggingIssue ? 'text-emerald-600' : 'text-slate-700'}`}>
-            {result.isDebuggingIssue ? 'Yes' : 'No'}
+          <p className={`text-sm sm:text-base font-bold ${isIssue ? 'text-emerald-600' : 'text-slate-600'}`}>
+            {isIssue ? 'Yes' : 'No'}
           </p>
         </div>
       </div>
@@ -40,7 +54,7 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({ result }) => {
         title={
           <div className="p-1 space-y-1 max-w-xs">
             <div className="font-bold text-xs text-indigo-300 uppercase tracking-wide">Error Type Classification</div>
-            <div className="text-xs sm:text-sm font-medium text-white break-words">{result.errorType}</div>
+            <div className="text-xs sm:text-sm font-medium text-white break-words">{displayErrorType}</div>
           </div>
         } 
         placement="top"
@@ -55,8 +69,8 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({ result }) => {
               <p className="text-xs font-medium text-slate-500">Error Type</p>
               <Info className="w-3 h-3 text-slate-400 shrink-0" />
             </div>
-            <p className="text-sm sm:text-base font-bold text-indigo-600 truncate break-words">
-              {result.errorType}
+            <p className={`text-sm sm:text-base font-bold truncate break-words ${isIssue ? 'text-indigo-600' : 'text-slate-600'}`}>
+              {displayErrorType}
             </p>
           </div>
         </div>
@@ -80,7 +94,7 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({ result }) => {
         title={
           <div className="p-1 space-y-1 max-w-xs">
             <div className="font-bold text-xs text-purple-300 uppercase tracking-wide">Identified Root Cause</div>
-            <div className="text-xs sm:text-sm text-white leading-relaxed break-words">{result.rootCause}</div>
+            <div className="text-xs sm:text-sm text-white leading-relaxed break-words">{displayRootCause}</div>
           </div>
         } 
         placement="top"
@@ -96,7 +110,7 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({ result }) => {
               <Info className="w-3 h-3 text-slate-400 shrink-0" />
             </div>
             <p className="text-xs sm:text-sm font-semibold text-slate-900 line-clamp-2 leading-tight break-words">
-              {result.rootCause}
+              {displayRootCause}
             </p>
           </div>
         </div>

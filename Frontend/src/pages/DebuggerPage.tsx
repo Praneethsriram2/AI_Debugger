@@ -104,6 +104,14 @@ export const DebuggerPage: React.FC = () => {
     </div>
   );
 
+  const handleLoadSample = () => {
+    setLogInput(`System.NullReferenceException: Object reference not set to an instance of an object.
+   at MyApp.Services.UserService.GetUserById(Int32 id) in C:\\Projects\\MyApp\\Services\\UserService.cs:line 25
+   at MyApp.Controllers.UserController.GetUser(Int32 id) in C:\\Projects\\MyApp\\Controllers\\UserController.cs:line 18`);
+    setAnalysisResult(null);
+    setError(null);
+  };
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-slate-100 font-sans">
       {/* Desktop Sidebar (hidden on mobile) */}
@@ -198,7 +206,7 @@ export const DebuggerPage: React.FC = () => {
             </div>
           )}
 
-          {analysisResult && <AnalysisResult result={analysisResult} />}
+          {analysisResult && <AnalysisResult result={analysisResult} onLoadSample={handleLoadSample} />}
         </main>
       </div>
     </div>
