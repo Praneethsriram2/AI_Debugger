@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Drawer } from 'antd';
-import { Info, Sparkles, Code2, Server, Database, Bot, Zap, CheckCircle2 } from 'lucide-react';
+import { Info, Sparkles, Code2, Server, Database, Bot, Zap, CheckCircle2, Menu } from 'lucide-react';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  onToggleMobileSidebar?: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -22,14 +26,32 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center py-4 px-8 border-b border-slate-200/60 bg-slate-50/50 backdrop-blur-sm">
-        <div className="flex items-center gap-2">
-          {/* Top bar header spacing */}
+      <header className="flex justify-between items-center py-3.5 px-4 sm:px-8 border-b border-slate-200/60 bg-slate-50/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="flex items-center gap-3">
+          {/* Mobile Hamburger Toggle Button */}
+          {onToggleMobileSidebar && (
+            <button
+              onClick={onToggleMobileSidebar}
+              className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-200/70 transition-colors cursor-pointer"
+              title="Open Navigation"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* Mobile Branding (visible on mobile only) */}
+          <div className="flex md:hidden items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xs">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-bold text-slate-900 text-base">AI Debugger</span>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
+
+        <div className="flex items-center gap-3 sm:gap-4">
           <button
             onClick={showDrawer}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700 hover:text-indigo-600 hover:border-indigo-200 hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs sm:text-sm font-medium text-slate-700 hover:text-indigo-600 hover:border-indigo-200 hover:bg-slate-50 transition-all cursor-pointer shadow-xs"
           >
             <Info className="w-4 h-4 text-indigo-500" />
             <span>About</span>
@@ -51,7 +73,7 @@ export const Header: React.FC = () => {
           </div>
         }
         placement="right"
-        width={440}
+        width={Math.min(440, typeof window !== 'undefined' ? window.innerWidth * 0.9 : 440)}
         onClose={onClose}
         open={open}
         className="font-sans"
@@ -91,7 +113,7 @@ export const Header: React.FC = () => {
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
               Built with
             </h4>
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {techStack.map((tech) => {
                 const IconComp = tech.icon;
                 return (

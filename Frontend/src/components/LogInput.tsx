@@ -31,13 +31,13 @@ System.NullReferenceException: Object reference not set to an instance of an obj
   const isButtonDisabled = isLoading || !logInput.trim() || isRateLimited;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Title & Description */}
       <div>
-        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
           Analyze <span className="text-indigo-600 bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Your Logs</span>
         </h1>
-        <p className="mt-2 text-slate-600 text-base">
+        <p className="mt-1.5 sm:mt-2 text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed">
           Paste an error message, stack trace, or log. Our AI will analyze it and provide possible causes and fixes.
         </p>
       </div>
@@ -48,22 +48,22 @@ System.NullReferenceException: Object reference not set to an instance of an obj
           value={logInput}
           onChange={(e) => setLogInput(e.target.value.slice(0, maxLength))}
           placeholder={placeholderText}
-          rows={7}
-          className="w-full p-4 font-mono text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none resize-y min-h-[180px]"
+          rows={6}
+          className="w-full p-3 sm:p-4 font-mono text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none resize-y min-h-[140px] sm:min-h-[180px]"
         />
-        <div className="flex justify-end px-4 py-2 bg-slate-50/50 border-t border-slate-100">
-          <span className="text-xs font-medium text-slate-400">
+        <div className="flex justify-end px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-50/50 border-t border-slate-100">
+          <span className="text-[11px] sm:text-xs font-medium text-slate-400">
             {logInput.length}/{maxLength}
           </span>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0">
         <button
           onClick={onAnalyze}
           disabled={isButtonDisabled}
-          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-white shadow-sm transition-all cursor-pointer ${
+          className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium text-xs sm:text-sm text-white shadow-sm transition-all cursor-pointer w-full sm:w-auto ${
             isButtonDisabled
               ? 'bg-indigo-400 opacity-60 cursor-not-allowed'
               : 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800'
@@ -88,7 +88,7 @@ System.NullReferenceException: Object reference not set to an instance of an obj
         <button
           onClick={onClear}
           disabled={isLoading || !logInput}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-300 bg-white font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition-all cursor-pointer ${
+          className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-300 bg-white font-medium text-xs sm:text-sm text-slate-700 shadow-sm hover:bg-slate-50 transition-all cursor-pointer w-full sm:w-auto ${
             isLoading || !logInput ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >

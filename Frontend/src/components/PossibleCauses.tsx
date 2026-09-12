@@ -7,18 +7,18 @@ interface PossibleCausesProps {
 
 export const PossibleCauses: React.FC<PossibleCausesProps> = ({ causes }) => {
   return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2 text-amber-500 font-semibold text-base">
-        <AlertTriangle className="w-5 h-5" />
+    <div className="space-y-3 min-w-0">
+      <div className="flex items-center gap-2 text-amber-500 font-semibold text-sm sm:text-base">
+        <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
         <span>Possible Causes</span>
       </div>
 
-      <ol className="space-y-2 text-sm text-slate-700">
+      <ol className="space-y-2 text-xs sm:text-sm text-slate-700 min-w-0">
         {causes && causes.length > 0 ? (
           causes.map((cause, idx) => (
-            <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+            <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700 min-w-0">
               <span className="font-semibold text-slate-600 shrink-0">{idx + 1}.</span>
-              <span>{cause}</span>
+              <span className="break-words [overflow-wrap:anywhere] min-w-0 flex-1">{cause}</span>
             </li>
           ))
         ) : (
@@ -30,4 +30,3 @@ export const PossibleCauses: React.FC<PossibleCausesProps> = ({ causes }) => {
 };
 
 export default PossibleCauses;
-
